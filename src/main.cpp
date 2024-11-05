@@ -56,8 +56,8 @@ int main(int argc, char* argv[])
     double delta_time = 0.0;
 
     StackBox menu_stack_box;
-    auto start_button = menu_stack_box.create_button(iVector2(45, 20), 10, 5, " Start ", true);
-    auto exit_button = menu_stack_box.create_button(iVector2(45, 26), 10, 5, " Exit  ", false);
+    auto start_button = menu_stack_box.create_button(iVector2(40, 20), 20, 5, "Start", true);
+    auto exit_button = menu_stack_box.create_button(iVector2(40, 26), 20, 5, "Exit", false);
     exit_button->set_action_callback(quit_application);
 
     // SDL_ShowCursor(0);
