@@ -11,11 +11,47 @@
 
 class MenuButton;
 
+struct StackBoxInitParams
+{
+    iVector2 initial_position{0, 0};
+
+    uint32_t distance_between_entries = 0;
+
+    int buttons_width = 10;
+
+    int buttons_height = 1;
+
+    std::vector<std::string> buttons_texts{};
+
+    uint32_t initial_focused_button_index = 0;
+
+    StackBoxInitParams(
+        iVector2 in_initial_position,
+        uint32_t in_distance_between_entries,
+        int in_buttons_width,
+        int in_buttons_height,
+        std::initializer_list<std::string> in_buttons_texts,
+        uint32_t in_initial_focused_button_index
+    )
+    {
+        initial_position = in_initial_position;
+        distance_between_entries = in_distance_between_entries;
+        buttons_width = in_buttons_width;
+        buttons_height = in_buttons_height;
+        buttons_texts = in_buttons_texts;
+        initial_focused_button_index = in_initial_focused_button_index;
+    }
+};
+
 class StackBox : public InputProcessor, public Drawable
 {
 public:
 
     StackBox();
+
+    StackBox(size_t button_reserved_space);
+
+    StackBox(const StackBoxInitParams& init_params);
 
     ~StackBox();
 

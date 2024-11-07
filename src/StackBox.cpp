@@ -6,6 +6,28 @@ StackBox::StackBox()
     buttons.reserve(5);
 }
 
+StackBox::StackBox(size_t button_reserved_space)
+{
+    buttons.reserve(button_reserved_space);
+}
+
+StackBox::StackBox(const StackBoxInitParams& init_params)
+{
+    if (init_params.buttons_texts.empty()) return;
+
+    // we reseve the amount we want in the vector
+    buttons.reserve(init_params.buttons_texts.size());
+
+    iVector2 current_position = init_params.initial_position;
+    size_t index = 0;
+    for (auto& text : init_params.buttons_texts)
+    {
+        create_button(current_position, init_params.buttons_width, init_params.buttons_height, text, index == init_params.initial_focused_button_index);
+        current_position.y += init_params.buttons_height + init_params.distance_between_entries;
+        ++index;
+    }
+}
+
 StackBox::~StackBox()
 {
     for (auto& button : buttons)
