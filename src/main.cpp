@@ -7,6 +7,8 @@
 #include "StackBox.h"
 #include "MenuButton.h"
 
+#include "Frames.h"
+
 inline static bool should_quit = false;
 
 static void quit_application()
@@ -93,7 +95,11 @@ int main(int argc, char* argv[])
 
         TCOD_console_clear(console.get());
         tcod::print(console, {100, 0}, std::to_string(delta_time), std::nullopt, std::nullopt, TCOD_alignment_t::TCOD_RIGHT);
+        tcod::draw_frame(console, {0, 0, 100, 40}, single_frame, {{255, 255, 255}}, {{0, 0, 0}});
         menu_stack_box.draw(&console);
+
+        // {'╔', '═', '╗', '║', ' ', '║', '╚', '═', '╝'}
+
         context.present(console);
 
     }
