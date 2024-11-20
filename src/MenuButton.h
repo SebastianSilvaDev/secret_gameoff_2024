@@ -3,11 +3,10 @@
 #include <string>
 #include "Utils.h"
 #include "Drawable.h"
-#include "Clickable.h"
 #include "ButtonStates.h"
 #include "Actionable.h"
 
-class MenuButton : public Drawable, public Clickable, public Actionable
+class MenuButton : public Drawable, public Actionable
 {
 public:
     MenuButton() = delete;
@@ -23,12 +22,6 @@ public:
     virtual void draw(tcod::Console* in_console) override;
 
     // end Drawable Interface
-
-    // begin Clickable Interface
-
-    virtual void click(iVector2 in_position) override;
-
-    // end Clickable Interface
 
     // begin Actionable Interface
     

@@ -46,10 +46,6 @@ void MenuButton::draw(tcod::Console *in_console)
 
 }
 
-void MenuButton::click(iVector2 in_position)
-{
-}
-
 void MenuButton::execute_action()
 {
     if (button_callback == nullptr) return;
