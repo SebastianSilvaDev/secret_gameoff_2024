@@ -1,21 +1,20 @@
 #pragma once
 
 #include <string>
-#include "Utils.h"
-#include "Drawable.h"
+#include "UIElement.h"
 #include "ButtonStates.h"
 #include "Actionable.h"
+#include "Focusable.h"
 
-class MenuButton : public Drawable, public Actionable
+class MenuButton : public UIElement, public Actionable, public Focusable
 {
 public:
-    MenuButton() = delete;
 
-    MenuButton(iVector2 in_position, int in_width, int in_height, std::string in_text, bool start_focused = false);
+    MenuButton(iVector2 in_position, int in_width, int in_height, std::string in_text);
 
-    MenuButton(MenuButton& b) = delete;
+    // MenuButton(iVector2 in_position, int in_width, int in_height, std::string in_text, bool start_focused = false);
 
-    virtual ~MenuButton();
+    virtual ~MenuButton() override;
 
     // begin Drawable Interface
 
@@ -29,6 +28,17 @@ public:
 
     // end Actionable Interface
 
+    // begin Focusable interface
+
+    virtual void set_focus_state(bool new_focus_state) override;
+
+    virtual bool is_focused() override
+    {
+        return m_state != ButtonStates::None;
+    }
+
+    // end Focusable interface
+
     void set_state(ButtonStates in_state);
 
     inline ButtonStates get_state() const
@@ -39,20 +49,7 @@ public:
     void set_action_callback(void (*in_callback)());
 
 protected:
-
-    iVector2 m_position = {0, 0};
-
-    int m_width = 0;
-
-    int m_height = 0;
-
-    std::string m_text = "";
-
     ButtonStates m_state = ButtonStates::None;
-
-    TCOD_ColorRGB m_foreground_color = {255, 255, 255};
-
-    TCOD_ColorRGB m_background_color = {};
 
     // function pointer
     void (*button_callback)() = nullptr;

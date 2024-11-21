@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
     StackBox menu_stack_box;
     auto start_button = menu_stack_box.create_button(iVector2(40, 20), 20, 5, "Start", true);
     auto exit_button = menu_stack_box.create_button(iVector2(40, 26), 20, 5, "Exit", false);
+    auto input_button = menu_stack_box.create_input_field(iVector2(40, 32), 20, 5);
     exit_button->set_action_callback(quit_application);
 
     // SDL_ShowCursor(0);

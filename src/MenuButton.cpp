@@ -1,28 +1,8 @@
 #include "MenuButton.h"
 #include "libtcod.h"
 
-MenuButton::MenuButton(iVector2 in_position, int in_width, int in_height, std::string in_text, bool start_focused)
-    : m_position(in_position), m_height(in_height), m_width(in_width)
+MenuButton::MenuButton(iVector2 in_position, int in_width, int in_height, std::string in_text) : UIElement(in_position, in_width, in_height, in_text)
 {
-    if(start_focused)
-    {
-        m_state = ButtonStates::Focused;
-    }
-    else
-    {
-        m_state = ButtonStates::None;
-    }
-    if (in_text.length() >= in_width)
-    {
-        m_text = in_text;
-    }
-    else
-    {
-        int length_dif = in_width - in_text.length();
-        int text_padding = (length_dif) / 2;
-        int front_padding = (length_dif & 1 == 0) ? text_padding : text_padding + 1;
-        m_text = std::string(front_padding, ' ') + in_text + std::string(text_padding, ' ');
-    }
 }
 
 MenuButton::~MenuButton()
@@ -52,6 +32,11 @@ void MenuButton::execute_action()
 
     button_callback();
 
+}
+
+void MenuButton::set_focus_state(bool new_focus_state)
+{
+    m_state = new_focus_state ? ButtonStates::Focused : ButtonStates::None;
 }
 
 void MenuButton::set_state(ButtonStates in_state)

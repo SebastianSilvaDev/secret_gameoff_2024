@@ -1,14 +1,17 @@
 #include "StackBox.h"
 #include "MenuButton.h"
+#include "InputField.h"
 
 StackBox::StackBox()
 {
     buttons.reserve(5);
+    focusable_elements.reserve(5);
 }
 
 StackBox::StackBox(size_t button_reserved_space)
 {
     buttons.reserve(button_reserved_space);
+    focusable_elements.reserve(button_reserved_space);
 }
 
 StackBox::StackBox(const StackBoxInitParams& init_params)
@@ -26,10 +29,13 @@ StackBox::StackBox(const StackBoxInitParams& init_params)
         current_position.y += init_params.buttons_height + init_params.distance_between_entries;
         ++index;
     }
+    create_input_field(current_position, init_params.buttons_width, init_params.buttons_width);
 }
 
 StackBox::~StackBox()
 {
+    // focusables dont own the objects
+    focusable_elements.clear();
     for (auto& button : buttons)
     {
         delete button;
@@ -39,6 +45,8 @@ StackBox::~StackBox()
 
 void StackBox::process_input(double delta_time, SDL_Keycode keycode)
 {
+    if (buttons.size() <= m_focused_button_index) return;
+    auto current_button = buttons[m_focused_button_index];
     switch (keycode)
     {
         case SDL_KeyCode::SDLK_UP:
@@ -48,10 +56,18 @@ void StackBox::process_input(double delta_time, SDL_Keycode keycode)
             cycle_buttons(VerticalDirections::Down);
             break;
         case SDL_KeyCode::SDLK_SPACE:
-            auto current_button = buttons[m_focused_button_index];
             if(current_button != nullptr)
             {
-                current_button->execute_action();
+                if (auto actionable_button = dynamic_cast<Actionable*>(current_button))
+                {
+                    actionable_button->execute_action();
+                }
+            }
+            break;
+        default:
+            if (auto input_processor_button = dynamic_cast<InputProcessor*>(current_button))
+            {
+                input_processor_button->process_input(delta_time, keycode);
             }
             break;
     }
@@ -72,31 +88,44 @@ void StackBox::add_button(MenuButton *new_button)
 
 MenuButton* StackBox::create_button(iVector2 in_position, int in_width, int in_height, std::string in_text, bool start_focused)
 {
-    auto new_button = buttons.emplace_back(new MenuButton(in_position, in_width, in_height, in_text, start_focused));
+    auto new_button = static_cast<MenuButton*>(buttons.emplace_back(new MenuButton(in_position, in_width, in_height, in_text)));
+    focusable_elements.emplace_back(new_button);
     if(start_focused)
     {
         for (auto& button : buttons)
         {
-            button->set_state(ButtonStates::None);
+            if (auto current_focusable = dynamic_cast<Focusable*>(button))
+            {
+                current_focusable->set_focus_state(false);
+            }
         }
-        new_button->set_state(ButtonStates::Focused);
+        new_button->set_focus_state(true);
         m_focused_button_index = buttons.size() - 1;
         return new_button;
     }
     if (buttons.size() <= 1)
     {
-        new_button->set_state(ButtonStates::Focused);
+        new_button->set_focus_state(false);
         m_focused_button_index = 0;
     }
+
     return new_button;
+}
+
+InputField *StackBox::create_input_field(iVector2 in_position, int in_width, int in_height)
+{
+    auto new_input_field = dynamic_cast<InputField*>(buttons.emplace_back(new InputField(in_position, in_width, in_height, "")));
+    focusable_elements.emplace_back(new_input_field);
+    return new_input_field;
 }
 
 void StackBox::cycle_buttons(VerticalDirections direction)
 {
-    auto current_button = buttons[m_focused_button_index];
+    if (focusable_elements.empty()) return;
+    auto current_button = focusable_elements[m_focused_button_index];
     if (current_button != nullptr) 
     {
-        current_button->set_state(ButtonStates::None);
+        current_button->set_focus_state(false);
     }
     switch(direction)
     {
@@ -113,7 +142,7 @@ void StackBox::cycle_buttons(VerticalDirections direction)
             break;
         case VerticalDirections::Down:
             ++m_focused_button_index;
-            if (m_focused_button_index >= buttons.size())
+            if (m_focused_button_index >= focusable_elements.size())
             {
                 m_focused_button_index = 0;
             }
@@ -121,9 +150,9 @@ void StackBox::cycle_buttons(VerticalDirections direction)
         case VerticalDirections::None:
             break;
     }
-    current_button = buttons[m_focused_button_index];
+    current_button = focusable_elements[m_focused_button_index];
     if (current_button != nullptr)
     {
-        current_button->set_state(ButtonStates::Focused);
+        current_button->set_focus_state(true);
     }
 }

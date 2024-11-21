@@ -9,7 +9,10 @@
 #include "Drawable.h"
 #include "Utils.h"
 
+class UIElement;
+class Focusable;
 class MenuButton;
+class InputField;
 
 struct StackBoxInitParams
 {
@@ -67,12 +70,16 @@ public:
 
     MenuButton* create_button(iVector2 in_position, int in_width, int in_height, std::string in_text, bool start_focused = false);
 
+    InputField* create_input_field(iVector2 in_position, int in_width, int in_height);
+
 protected:
     void cycle_buttons(VerticalDirections direction = VerticalDirections::Down);
 
 private:
 
-    std::vector<MenuButton*> buttons;
+    std::vector<UIElement*> buttons;
+
+    std::vector<Focusable*> focusable_elements;
 
     uint32_t m_focused_button_index = 0;
 
