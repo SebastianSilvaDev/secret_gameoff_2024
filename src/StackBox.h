@@ -6,6 +6,7 @@
 
 #include "InputProcessor.h"
 #include "ButtonStates.h"
+#include "TextInput.h"
 #include "Drawable.h"
 #include "Utils.h"
 
@@ -46,7 +47,7 @@ struct StackBoxInitParams
     }
 };
 
-class StackBox : public InputProcessor, public Drawable
+class StackBox : public InputProcessor, public Drawable, public TextInput
 {
 public:
 
@@ -63,8 +64,14 @@ public:
     // end Input Processor Interface
 
     // begin Drawablke Interface
-    virtual void draw(tcod::Console* in_console);
+    virtual void draw(tcod::Console* in_console) override;
     // end Drawable interface
+
+    // begin text input
+
+    virtual void process_text_input(const SDL_TextInputEvent& text_input_event) override;
+
+    // end text input
 
     void add_button(MenuButton* new_button);
 

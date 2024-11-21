@@ -3,8 +3,9 @@
 #include "UIElement.h"
 #include "InputProcessor.h"
 #include "Focusable.h"
+#include "TextInput.h"
 
-class InputField : public UIElement, public InputProcessor, public Focusable
+class InputField : public UIElement, public TextInput, public Focusable
 {
 
 public:
@@ -19,10 +20,11 @@ public:
 
     // End of Drawable Interface
 
-    // Begin of Input Processor
-    virtual void process_input(double delta_time, SDL_Keycode keycode);
+    // Begin of TextInput
 
-    // End of Input Processor
+    virtual void process_text_input(const SDL_TextInputEvent& text_input_event);
+
+    // End of TextInput
 
     // Begin of Focusable Interface
 

@@ -81,6 +81,16 @@ void StackBox::draw(tcod::Console *in_console)
     }
 }
 
+void StackBox::process_text_input(const SDL_TextInputEvent &text_input_event)
+{
+    if (buttons.empty() || m_focused_button_index >= buttons.size()) return;
+    auto current_button = dynamic_cast<TextInput*>(buttons[m_focused_button_index]);
+    if (current_button != nullptr)
+    {
+        current_button->process_text_input(text_input_event);
+    }
+}
+
 void StackBox::add_button(MenuButton *new_button)
 {
     buttons.push_back(new_button);

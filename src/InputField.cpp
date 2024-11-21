@@ -1,3 +1,6 @@
+// std
+#include <iostream>
+
 #include "InputField.h"
 
 InputField::InputField(iVector2 in_position, int in_width, int in_height, std::string in_text) : UIElement(in_position, in_width, in_height, in_text)
@@ -20,11 +23,12 @@ void InputField::draw(tcod::Console *in_console)
     }
 }
 
-void InputField::process_input(double delta_time, SDL_Keycode keycode)
+void InputField::process_text_input(const SDL_TextInputEvent &text_input_event)
 {
-    if(is_focused())
+    if (is_focused())
     {
-        m_text += keycode;
+        m_text += text_input_event.text;
+        std::cout << m_text << '\n';
     }
 }
 

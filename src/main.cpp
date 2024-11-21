@@ -86,6 +86,9 @@ int main(int argc, char* argv[])
                 case SDL_KEYDOWN:
                     menu_stack_box.process_input(delta_time, event.key.keysym.sym);
                     break;
+                case SDL_TEXTINPUT:
+                    menu_stack_box.process_text_input(event.text);
+                    break;
                 case SDL_QUIT:
                     should_quit = true;
                     break; // Exit
