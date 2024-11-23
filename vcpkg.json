@@ -1,6 +1,12 @@
 {
   "dependencies": [
     "libtcod",
-    "sdl2"
+    "sdl2",
+    {
+      "name": "lua",
+      "features": [
+        "cpp"
+      ]
+    }
   ]
 }

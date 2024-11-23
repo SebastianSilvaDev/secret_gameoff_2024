@@ -30,6 +30,8 @@ protected:
 
     std::string m_text = "";
 
+    std::string m_background = "";
+
     TCOD_ColorRGB m_foreground_color = {255, 255, 255};
 
     TCOD_ColorRGB m_background_color = {};

@@ -14,10 +14,12 @@ void MenuButton::draw(tcod::Console *in_console)
     switch (m_state)
     {
     case ButtonStates::None:
+        tcod::print_rect(*in_console, {m_position.x, m_position.y, m_width, m_height}, m_background, m_foreground_color, m_background_color, TCOD_alignment_t::TCOD_CENTER, TCOD_BKGND_LIGHTEN);
         tcod::print_rect(*in_console, {m_position.x, m_position.y, m_width, m_height}, m_text, m_foreground_color, m_background_color, TCOD_alignment_t::TCOD_CENTER, TCOD_BKGND_LIGHTEN);
         break;
     
     case ButtonStates::Focused:
+        tcod::print_rect(*in_console, {m_position.x, m_position.y, m_width, m_height}, m_background, m_background_color, m_foreground_color, TCOD_alignment_t::TCOD_CENTER, TCOD_BKGND_LIGHTEN);
         tcod::print_rect(*in_console, {m_position.x, m_position.y, m_width, m_height}, m_text, m_background_color, m_foreground_color, TCOD_alignment_t::TCOD_CENTER, TCOD_BKGND_LIGHTEN);
 
     default:
